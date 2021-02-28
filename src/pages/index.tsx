@@ -1,63 +1,32 @@
-import Head from 'next/head';
-import { GetServerSideProps } from 'next';
+import { useState } from 'react';
 
-import { ChallengeBox } from '../components/ChallengeBox';
-import { CompletedChallenges } from '../components/CompletedChallenges';
-import { Countdown } from '../components/Countdown';
-import { ExperienceBar } from "../components/ExperieceBar";
-import { Profile } from '../components/Profile';
-import { CountdownProvider } from '../contexts/CountdownContext';
+import styles from '../styles/pages/Login.module.css';
 
-import styles from '../styles/pages/Home.module.css'
-import { ChallengesProvider } from '../contexts/ChallengesContext';
-
-interface HomeProps {
-  level: number;
-  currentExperience: number;
-  completedChallenges: number;
-}
-
-export default function Home(props: HomeProps) {
-  return (
-    <ChallengesProvider
-      level={props.level}
-      currentExperience={props.currentExperience}
-      completedChallenges={props.completedChallenges}
-    >
-      <div className={styles.container}>      
-        <Head>
-          <title>Inicio | move.it</title>
-        </Head>
-        
-        <ExperienceBar />
-
-        <CountdownProvider>
-          <section>
-            <div >
-              <Profile />
-              <CompletedChallenges />
-              <Countdown />
-            </div>
-
-            <div>
-              <ChallengeBox />
-            </div>
-          </section>
-        </CountdownProvider>
-      </div>
-    </ChallengesProvider>
-  )
-}
-
-export const getServerSideProps:GetServerSideProps = async (ctx) => {
+export default function Login() {
+  const [user, setUser] = useState('');
   
-  const { level, currentExperience, completedChallenges} = ctx.req.cookies;
+  return (
+    <div className={styles.container}>
+      <div className={styles.empty}></div>
+      <div className={styles.login}>
+        <img src="logo-full-white.svg" alt="move.it"/>
 
-  return {
-    props: {
-      level: Number(level),
-      currentExperience: Number(currentExperience),
-      completedChallenges: Number(completedChallenges)
-    }
-  }
+        <h1>Bem-vindo</h1>
+
+        <div className={styles.github}>
+          <img src="icons/github.svg" alt="Github"/>
+          <p>Faça login com o seu Github para começar</p>
+        </div>
+
+        <div className={styles.form}>
+          <form action={`/${user}`} method="post">
+            <input type="text" name="user" id="user" autoComplete="off" value={user} onChange={(event) => {setUser(event.target.value)}}/>
+            <button type="submit">
+              <img src="/icons/button-login.svg" alt="Entrar"/>
+            </button>          
+          </form>
+        </div>
+      </div>
+    </div>
+  );
 }

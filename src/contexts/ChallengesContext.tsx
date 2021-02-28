@@ -5,6 +5,7 @@ import { LevelUpModal } from '../components/LevelUpModal';
 
 interface ChallengesProviderProps {
   children: ReactNode;
+  user: string;
   level: number;
   currentExperience: number;
   completedChallenges: number;
@@ -17,6 +18,7 @@ interface Challenge {
 }
 
 interface ChallengesContextData {
+  user: string;
   level: number;
   currentExperience: number;
   completedChallenges: number;
@@ -32,6 +34,8 @@ interface ChallengesContextData {
 export const ChallengesContext = createContext({} as ChallengesContextData);
 
 export function ChallengesProvider({ children, ...rest }: ChallengesProviderProps) {
+  const user = rest.user;
+
   const [level, setLevel] = useState(rest.level ?? 1);
   const [currentExperience, setCurrentExperience] = useState(rest.currentExperience ?? 0);
   const [completedChallenges, setCompletedChallenges] = useState(rest.completedChallenges ?? 0);
@@ -103,7 +107,8 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
   return (
     <ChallengesContext.Provider
       value={{
-        level, 
+        user,
+        level,
         currentExperience, 
         completedChallenges,
         activeChallenge,
